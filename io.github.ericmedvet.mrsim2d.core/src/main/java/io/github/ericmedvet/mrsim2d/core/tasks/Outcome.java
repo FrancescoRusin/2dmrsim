@@ -32,6 +32,10 @@ public class Outcome {
     return get(Aggregate.AVERAGE, Metric.BB_H, Subject.ALL);
   }
 
+  public double allAgentsAverageTerrainHeight() {
+    return get(Aggregate.AVERAGE, Metric.TERRAIN_H, Subject.ALL);
+  }
+
   public double allAgentsAverageWidth() {
     return get(Aggregate.AVERAGE, Metric.BB_W, Subject.ALL);
   }
