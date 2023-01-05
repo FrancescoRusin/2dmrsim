@@ -1,5 +1,6 @@
 package io.github.ericmedvet.mrsim2d.core.functions;
 
+
 import io.github.ericmedvet.mrsim2d.core.util.Parametrized;
 
 import java.util.*;
