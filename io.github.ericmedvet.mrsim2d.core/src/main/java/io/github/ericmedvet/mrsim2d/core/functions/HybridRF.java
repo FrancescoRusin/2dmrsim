@@ -1,15 +1,13 @@
 package io.github.ericmedvet.mrsim2d.core.functions;
 
-import java.util.*;
-
-public class MixedRF extends AbstractParamRF {
+public class HybridRF extends AbstractParamRF {
     AbstractParamRF function1;
     AbstractParamRF function2;
 
-    public MixedRF(AbstractParamRF function1, AbstractParamRF function2) {
+    public HybridRF(AbstractParamRF function1, AbstractParamRF function2) {
         if (function1.nOfInputs() != function2.nOfInputs() || function1.nOfOutputs() != function2.nOfOutputs()) {
-                throw new IllegalArgumentException("Bad construction of MixedRF");
-            }
+            throw new IllegalArgumentException("Bad construction of MixedRF");
+        }
         this.function1 = function1;
         this.function2 = function2;
     }
@@ -40,8 +38,7 @@ public class MixedRF extends AbstractParamRF {
         double[] f2Params = function2.getParams();
         double[] totalParams = new double[f1Params.length + f2Params.length];
         System.arraycopy(f1Params, 0, totalParams, 0, f1Params.length);
-        if (totalParams.length - f1Params.length >= 0)
-            System.arraycopy(f2Params, f1Params.length - f1Params.length, totalParams, f1Params.length, totalParams.length - f1Params.length);
+        System.arraycopy(f2Params, 0, totalParams, f1Params.length, totalParams.length - f1Params.length);
         return totalParams;
     }
 
@@ -49,12 +46,8 @@ public class MixedRF extends AbstractParamRF {
     public void setParams(double[] params) {
         double[] f1Params = new double[function1.getParams().length];
         double[] f2Params = new double[function2.getParams().length];
-        for (int i = 0; i < f1Params.length; ++i) {
-            f1Params[i] = params[i];
-        }
-        for (int j = f1Params.length; j < params.length; ++j) {
-            f2Params[j - f1Params.length] = params[j];
-        }
+        System.arraycopy(params, 0, f1Params, 0, f1Params.length);
+        System.arraycopy(params, f1Params.length, f2Params, 0, f2Params.length);
         function1.setParams(f1Params);
         function2.setParams(f2Params);
     }
