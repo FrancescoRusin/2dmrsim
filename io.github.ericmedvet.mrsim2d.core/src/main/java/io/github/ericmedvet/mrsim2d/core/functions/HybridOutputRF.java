@@ -1,10 +1,10 @@
 package io.github.ericmedvet.mrsim2d.core.functions;
 
-public class HybridRF extends AbstractParamRF {
+public class HybridOutputRF extends AbstractParamRF {
     AbstractParamRF function1;
     AbstractParamRF function2;
 
-    public HybridRF(AbstractParamRF function1, AbstractParamRF function2) {
+    public HybridOutputRF(AbstractParamRF function1, AbstractParamRF function2) {
         if (function1.nOfInputs() != function2.nOfInputs() || function1.nOfOutputs() != function2.nOfOutputs()) {
             throw new IllegalArgumentException("Bad construction of MixedRF");
         }
