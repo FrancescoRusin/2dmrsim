@@ -19,7 +19,6 @@ public class HybridOutputRF extends AbstractParamRF {
         double[] result1 = function1.apply(input);
         double[] result2 = function2.apply(input);
         double[] totalResult = new double[this.nOfOutputs()];
-        System.out.println(Arrays.stream(totalResult).boxed().toList());
         System.arraycopy(result1, 0, totalResult, 0, result1.length);
         System.arraycopy(result2, 0, totalResult, result1.length, result2.length);
         return totalResult;
