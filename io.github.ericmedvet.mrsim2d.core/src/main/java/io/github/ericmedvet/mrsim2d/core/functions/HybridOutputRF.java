@@ -1,7 +1,5 @@
 package io.github.ericmedvet.mrsim2d.core.functions;
 
-import java.util.Arrays;
-
 public class HybridOutputRF extends AbstractParamRF {
     AbstractParamRF function1;
     AbstractParamRF function2;
