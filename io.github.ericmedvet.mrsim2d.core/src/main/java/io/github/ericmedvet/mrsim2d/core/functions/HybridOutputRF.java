@@ -5,7 +5,7 @@ public class HybridOutputRF extends AbstractParamRF {
     AbstractParamRF function2;
 
     public HybridOutputRF(AbstractParamRF function1, AbstractParamRF function2) {
-        if (function1.nOfInputs() != function2.nOfInputs() || function1.nOfOutputs() != function2.nOfOutputs()) {
+        if (function1.nOfInputs() != function2.nOfInputs()) {
             throw new IllegalArgumentException("Bad construction of MixedRF");
         }
         this.function1 = function1;

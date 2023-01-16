@@ -149,8 +149,8 @@ public class TimedRealFunctions {
 
   @SuppressWarnings("unused")
   public static Builder<HybridOutputRF> hybridOutputController(
-          @Param(value = "f1") Builder<? extends AbstractParamRF> builder1,
-          @Param(value = "f2") Builder<? extends AbstractParamRF> builder2,
+          @Param(value = "outputFunction1") Builder<? extends AbstractParamRF> builder1,
+          @Param(value = "outputFunction2") Builder<? extends AbstractParamRF> builder2,
           @Param(value = "outputSplit", dD = 0.5) double outputSplit
   ) {
     return (nOfInputs, nOfOutputs) -> {
