@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 /**
  * @author eric
  */
-public class MultiLayerPerceptron implements RealFunction, Parametrized {
+public class MultiLayerPerceptron extends AbstractParamRF {
 
   protected final ActivationFunction activationFunction;
   protected final double[][][] weights;
