@@ -1,16 +1,17 @@
 package io.github.ericmedvet.mrsim2d.buildable.builders;
 
-import io.github.ericmedvet.mrsim2d.core.functions.ParamFunction;
-
-import java.util.function.BiFunction;
+import io.github.ericmedvet.jnb.core.Param;
+import io.github.ericmedvet.mrsim2d.core.functions.SimpleDoubleSupplier;
 
 public class ParamFunctions {
+
     private ParamFunctions() {
     }
 
-    public interface Builder<F extends ParamFunction<?, ?>> {
-        public F build();
+    @SuppressWarnings("unused")
+    public static SimpleDoubleSupplier simpleDoubleSupplier(
+            @Param("nOfResults") int nOfResults
+    ) {
+        return new SimpleDoubleSupplier(nOfResults);
     }
-
-    public Builder<ParamFunction<Double, Integer>>
 }

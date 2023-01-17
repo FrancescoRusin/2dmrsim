@@ -20,6 +20,7 @@ import io.github.ericmedvet.jnb.core.Param;
 import io.github.ericmedvet.mrsim2d.core.geometry.Terrain;
 import io.github.ericmedvet.mrsim2d.core.tasks.locomotion.Locomotion;
 import io.github.ericmedvet.mrsim2d.core.tasks.piling.FallPiling;
+import io.github.ericmedvet.mrsim2d.core.tasks.piling.GodPiling;
 import io.github.ericmedvet.mrsim2d.core.tasks.piling.StandPiling;
 
 import java.util.random.RandomGenerator;
@@ -51,6 +52,19 @@ public class Tasks {
       @Param(value = "initialYGap", dD = 0.1) double initialYGap
   ) {
     return new Locomotion(duration, terrain, initialXGap, initialYGap);
+  }
+
+  @SuppressWarnings("unused")
+  public static GodPiling godPiling(
+          @Param(value = "duration", dD = 45) double duration,
+          @Param(value = "nOfAgents") int nOfAgents,
+          @Param(value = "xGapRatio", dD = 1) double xGapRatio,
+          @Param(value = "terrain", dNPM = "sim.terrain.flat()") Terrain terrain,
+          @Param(value = "firstXGap", dD = 10) double firstXGap,
+          @Param(value = "spawnYGap", dD = 0.1) double spawnYGap,
+          @Param(value = "spawnTicks", dD = 1) double spawnTicks
+  ) {
+    return new GodPiling(duration, nOfAgents, xGapRatio, terrain, firstXGap, spawnYGap, spawnTicks);
   }
 
   @SuppressWarnings("unused")
