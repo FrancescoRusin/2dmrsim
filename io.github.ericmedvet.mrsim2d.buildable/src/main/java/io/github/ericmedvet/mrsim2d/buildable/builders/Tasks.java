@@ -60,7 +60,7 @@ public class Tasks {
           @Param(value = "nOfAgents") int nOfAgents,
           @Param(value = "xGapRatio", dD = 1) double xGapRatio,
           @Param(value = "terrain", dNPM = "sim.terrain.flat()") Terrain terrain,
-          @Param(value = "firstXGap", dD = 10) double firstXGap,
+          @Param(value = "firstXGap", dD = 20) double firstXGap,
           @Param(value = "spawnYGap", dD = 0.1) double spawnYGap,
           @Param(value = "spawnTicks", dD = 1) double spawnTicks
   ) {

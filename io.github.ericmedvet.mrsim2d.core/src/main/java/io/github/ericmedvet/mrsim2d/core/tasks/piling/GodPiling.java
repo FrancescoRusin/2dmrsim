@@ -8,7 +8,6 @@ import io.github.ericmedvet.mrsim2d.core.actions.TranslateAgent;
 import io.github.ericmedvet.mrsim2d.core.bodies.Body;
 import io.github.ericmedvet.mrsim2d.core.engine.Engine;
 import io.github.ericmedvet.mrsim2d.core.functions.ParamFunction;
-import io.github.ericmedvet.mrsim2d.core.functions.TimedRealFunction;
 import io.github.ericmedvet.mrsim2d.core.geometry.BoundingBox;
 import io.github.ericmedvet.mrsim2d.core.geometry.Point;
 import io.github.ericmedvet.mrsim2d.core.geometry.Terrain;
@@ -21,11 +20,10 @@ import io.github.ericmedvet.mrsim2d.core.util.PolyUtils;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class GodPiling implements Task<Pair<Supplier<EmbodiedAgent>, Supplier<ParamFunction<Double, Integer>>>, Outcome> {
-    private final static double FIRST_X_GAP = 10;
+    private final static double FIRST_X_GAP = 20;
     private final static double SPAWN_Y_GAP = 0.1;
     private final static double SPAWN_TICKS = 1;
     private final double duration;
