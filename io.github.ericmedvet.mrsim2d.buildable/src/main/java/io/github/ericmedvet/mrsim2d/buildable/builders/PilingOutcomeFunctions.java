@@ -28,6 +28,13 @@ public class PilingOutcomeFunctions {
   }
 
   @SuppressWarnings("unused")
+  public static Function<Outcome, Double> finalH(
+          @Param(value = "transientTime", dD = 0) double transientTime
+  ) {
+    return o -> o.subOutcome(new DoubleRange(transientTime, o.duration())).allAgentsFinalHeight();
+  }
+
+  @SuppressWarnings("unused")
   public static Function<Outcome, Double> maxAvgH(
       @Param(value = "transientTime", dD = 0) double transientTime
   ) {
