@@ -62,9 +62,10 @@ public class Tasks {
       @Param(value = "terrain", dNPM = "sim.terrain.flat()") Terrain terrain,
       @Param(value = "initialXGap", dD = 1) double initialXGap,
       @Param(value = "initialYGap", dD = 0.1) double initialYGap,
-      @Param(value = "shape") Grid<GridBody.VoxelType> shape
+      @Param(value = "shape") Grid<GridBody.VoxelType> shape,
+      @Param(value = "linkType") PrebuiltIndependentLocomotion.AnchorType anchorType
   ) {
-    return new PrebuiltIndependentLocomotion(duration, terrain, initialXGap, initialYGap, shape);
+    return new PrebuiltIndependentLocomotion(duration, terrain, initialXGap, initialYGap, shape, anchorType);
   }
 
   @SuppressWarnings("unused")

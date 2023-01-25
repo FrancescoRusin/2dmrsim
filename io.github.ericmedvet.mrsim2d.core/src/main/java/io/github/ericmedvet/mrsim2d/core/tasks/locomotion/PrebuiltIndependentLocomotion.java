@@ -38,18 +38,25 @@ public class PrebuiltIndependentLocomotion implements Task<Supplier<AbstractInde
   private final double initialYGap;
   private final Grid<GridBody.VoxelType> shape;
 
+  private final AnchorType anchorType;
+
+  public enum AnchorType {
+    NONE, RIGID, SOFT
+  }
   public PrebuiltIndependentLocomotion(
       double duration,
       Terrain terrain,
       double initialXGap,
       double initialYGap,
-      Grid<GridBody.VoxelType> shape
+      Grid<GridBody.VoxelType> shape,
+      AnchorType anchorType
   ) {
     this.duration = duration;
     this.terrain = terrain;
     this.initialXGap = initialXGap;
     this.initialYGap = initialYGap;
     this.shape = shape;
+    this.anchorType = anchorType;
   }
 
   @Override
@@ -98,17 +105,19 @@ public class PrebuiltIndependentLocomotion implements Task<Supplier<AbstractInde
         continue;
       }
       Grid.Key[] adjacentKeys = new Grid.Key[]{
-          key.at(1, 0),
-          key.at(0, 1)
+              key.at(1, 0),
+              key.at(0, 1)
       };
-      for (Grid.Key adjacentKey : adjacentKeys) {
-        if (agents.isValid(adjacentKey) && agents.get(adjacentKey) != null) {
-          engine.perform(new AttachClosestAnchors(
-              2,
-              agents.get(key).voxel(),
-              agents.get(adjacentKey).voxel(),
-              Anchor.Link.Type.RIGID
-          ));
+      if (anchorType != AnchorType.NONE) {
+        for (Grid.Key adjacentKey : adjacentKeys) {
+          if (agents.isValid(adjacentKey) && agents.get(adjacentKey) != null) {
+            engine.perform(new AttachClosestAnchors(
+                    2,
+                    agents.get(key).voxel(),
+                    agents.get(adjacentKey).voxel(),
+                    anchorType == AnchorType.RIGID ? Anchor.Link.Type.RIGID : Anchor.Link.Type.SOFT
+            ));
+          }
         }
       }
     }
