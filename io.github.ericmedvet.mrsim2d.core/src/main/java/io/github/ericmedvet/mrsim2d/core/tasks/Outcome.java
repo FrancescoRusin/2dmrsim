@@ -72,6 +72,14 @@ public class Outcome {
     return firstAgentXDistance() / duration();
   }
 
+  public double allAgentsXDistance() {
+    return get(Aggregate.FINAL, Metric.X, Subject.ALL) - get(Aggregate.INITIAL, Metric.X, Subject.ALL);
+  }
+
+  public double allAgentsXVelocity() {
+    return allAgentsXDistance() / duration();
+  }
+
   private double get(Aggregate aggregate, Metric metric, Subject subject) {
     Double value = metricMap.get(new Key(metric, aggregate, subject));
     if (value == null) {

@@ -55,4 +55,11 @@ public class LocomotionOutcomeFunctions {
     return o -> o.subOutcome(new DoubleRange(transientTime, o.duration())).firstAgentXVelocity();
   }
 
+  @SuppressWarnings("unused")
+  public static Function<Outcome, Double> multiAverageXVelocity(
+          @Param(value = "transientTime", dD = 0) double transientTime
+  ) {
+    return o -> o.subOutcome(new DoubleRange(transientTime, o.duration())).allAgentsXVelocity();
+  }
+
 }
