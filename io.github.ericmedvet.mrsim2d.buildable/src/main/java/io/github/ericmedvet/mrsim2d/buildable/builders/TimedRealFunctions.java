@@ -20,7 +20,9 @@ import io.github.ericmedvet.jnb.core.Param;
 import io.github.ericmedvet.mrsim2d.core.functions.*;
 import io.github.ericmedvet.mrsim2d.core.util.DoubleRange;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.function.BiFunction;
 import java.util.random.RandomGenerator;
 import java.util.stream.IntStream;
@@ -117,6 +119,43 @@ public class TimedRealFunctions {
           innerNeurons,
           nOfOutputs
       );
+    };
+  }
+
+  @SuppressWarnings("unused")
+  public static Builder<Constant> constant(
+          @Param(value = "number", dD = 0.0) double number
+  ) {
+    return (nOfInputs, nOfOutputs) -> {
+      double[] outputs = new double[nOfOutputs];
+      Arrays.fill(outputs, number);
+      return new Constant(nOfInputs, outputs);
+    };
+  }
+
+  @SuppressWarnings("unused")
+  public static Builder<MultiControl> doubleController(
+          @Param(value = "f1") Builder<? extends AbstractParamRF> builder1,
+          @Param(value = "f2") Builder<? extends AbstractParamRF> builder2,
+          @Param(value = "switchTime", dD = 1.0) double switchTime
+  ) {
+    return (nOfInputs, nOfOutputs) -> {
+      TreeMap<Double, AbstractParamRF> functionMap = new TreeMap<>();
+      functionMap.put(switchTime, builder1.apply(nOfInputs, nOfOutputs));
+      functionMap.put(Double.POSITIVE_INFINITY, builder2.apply(nOfInputs, nOfOutputs));
+      return new MultiControl(functionMap);
+    };
+  }
+
+  @SuppressWarnings("unused")
+  public static Builder<HybridOutputRF> hybridOutputController(
+          @Param(value = "outputFunction1") Builder<? extends AbstractParamRF> builder1,
+          @Param(value = "outputFunction2") Builder<? extends AbstractParamRF> builder2,
+          @Param(value = "outputSplit", dD = 0.5) double outputSplit
+  ) {
+    return (nOfInputs, nOfOutputs) -> {
+      int split = (int) Math.floor(nOfOutputs * outputSplit);
+      return new HybridOutputRF(builder1.apply(nOfInputs, split), builder2.apply(nOfInputs, nOfOutputs - split));
     };
   }
 

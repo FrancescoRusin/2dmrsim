@@ -1,5 +1,6 @@
 package io.github.ericmedvet.mrsim2d.core.tasks;
 
+import io.github.ericmedvet.mrsim2d.core.geometry.BoundingBox;
 import io.github.ericmedvet.mrsim2d.core.geometry.Point;
 import io.github.ericmedvet.mrsim2d.core.geometry.Poly;
 import io.github.ericmedvet.mrsim2d.core.util.DoubleRange;
@@ -30,6 +31,10 @@ public class Outcome {
 
   public double allAgentsAverageHeight() {
     return get(Aggregate.AVERAGE, Metric.BB_H, Subject.ALL);
+  }
+
+  public double allAgentsAverageTerrainHeight() {
+    return get(Aggregate.AVERAGE, Metric.TERRAIN_H, Subject.ALL);
   }
 
   public double allAgentsAverageWidth() {
@@ -97,9 +102,8 @@ public class Outcome {
 
   private double get(Metric metric, Subject subject, Observation observation) {
     return switch (metric) {
-      case X -> subject.equals(Subject.FIRST) ? observation.getFirstAgentCenter().x() : observation.getAllBoundingBox()
-          .center()
-          .x();
+      case X -> subject.equals(Subject.FIRST) ? observation.getFirstAgentCenter().x() :
+        observation.getBoundingBoxes().stream().map(BoundingBox::center).mapToDouble(Point::x).average().orElse(0);
       case Y -> subject.equals(Subject.FIRST) ? observation.getFirstAgentCenter().y() : observation.getAllBoundingBox()
           .center()
           .y();
