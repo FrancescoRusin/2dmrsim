@@ -23,7 +23,7 @@ public class Outcome {
   }
 
   private enum Aggregate {INITIAL, FINAL, AVERAGE, MIN, MAX}
-  private enum Metric {X, Y, TERRAIN_H, BB_W, BB_H, BB_AREA}
+  private enum Metric {X, Y, TERRAIN_H, BB_W, BB_H, BB_AREA, MAX_X}
 
   private enum Subject {FIRST, ALL}
 
@@ -85,6 +85,14 @@ public class Outcome {
     return allAgentsXDistance() / duration();
   }
 
+  public double allAgentsMaxXDistance() {
+    return get(Aggregate.FINAL, Metric.MAX_X, Subject.ALL) - get(Aggregate.INITIAL, Metric.MAX_X, Subject.ALL);
+  }
+
+  public double allAgentsMaxXVelocity() {
+    return allAgentsMaxXDistance() / duration();
+  }
+
   private double get(Aggregate aggregate, Metric metric, Subject subject) {
     Double value = metricMap.get(new Key(metric, aggregate, subject));
     if (value == null) {
@@ -124,6 +132,8 @@ public class Outcome {
           .width() : observation.getAllBoundingBox().width();
       case BB_H -> subject.equals(Subject.FIRST) ? observation.getFirstAgentBoundingBox()
           .height() : observation.getAllBoundingBox().height();
+      case MAX_X -> subject.equals(Subject.FIRST) ? observation.getFirstAgentCenter().x() :
+        observation.getAllBoundingBox().max().x();
     };
   }
 
