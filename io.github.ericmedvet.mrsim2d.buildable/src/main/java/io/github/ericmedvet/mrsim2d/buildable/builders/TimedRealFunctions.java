@@ -160,6 +160,16 @@ public class TimedRealFunctions {
   }
 
   @SuppressWarnings("unused")
+  public static Builder<HybridOutputRF> hybridRecombinedOutputController(
+          @Param(value = "outputFunction1") Builder<? extends AbstractParamRF> builder1,
+          @Param(value = "outputFunction2") Builder<? extends AbstractParamRF> builder2,
+          @Param(value = "distribution") List<Integer> distribution
+  ) {
+    int split = (int) distribution.stream().filter(i -> i == 1).count();
+    return (nOfInputs, nOfOutputs) -> new HybridOutputRF(builder1.apply(nOfInputs, split), builder2.apply(nOfInputs, nOfOutputs - split), distribution);
+  }
+
+  @SuppressWarnings("unused")
   public static Builder<NoisedTRF> noised(
       @Param(value = "inputSigma", dD = 0) double inputSigma,
       @Param(value = "outputSigma", dD = 0) double outputSigma,

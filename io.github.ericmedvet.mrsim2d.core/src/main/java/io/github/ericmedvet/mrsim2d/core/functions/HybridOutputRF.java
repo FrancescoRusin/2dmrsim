@@ -1,15 +1,42 @@
 package io.github.ericmedvet.mrsim2d.core.functions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HybridOutputRF extends AbstractParamRF {
     AbstractParamRF function1;
     AbstractParamRF function2;
+    List<Integer> distribution;
 
-    public HybridOutputRF(AbstractParamRF function1, AbstractParamRF function2) {
-        if (function1.nOfInputs() != function2.nOfInputs()) {
+    public HybridOutputRF(AbstractParamRF function1, AbstractParamRF function2, List<Integer> distribution) {
+        if (function1.nOfInputs() != function2.nOfInputs() || function1.nOfOutputs() + function2.nOfOutputs() != distribution.size()) {
+            throw new IllegalArgumentException("Bad construction of MixedRF");
+        }
+        for (Integer i : distribution) {
+            if (i != 1 && i != 2) {
+                throw new IllegalArgumentException("Bad construction of MixedRF");
+            }
+        }
+        if (distribution.stream().filter(i -> i == 1).count() != function1.nOfOutputs() ||
+                distribution.stream().filter(i -> i == 2).count() != function2.nOfOutputs()) {
             throw new IllegalArgumentException("Bad construction of MixedRF");
         }
         this.function1 = function1;
         this.function2 = function2;
+        this.distribution = distribution;
+    }
+
+    public HybridOutputRF(AbstractParamRF function1, AbstractParamRF function2) {
+        List<Integer> distribution = new ArrayList<>(function1.nOfOutputs() + function2.nOfOutputs());
+        for(int i = 0; i < function1.nOfOutputs(); ++i) {
+            distribution.add(1);
+        }
+        for(int i = 0; i < function2.nOfOutputs(); ++i) {
+            distribution.add(2);
+        }
+        this.function1 = function1;
+        this.function2 = function2;
+        this.distribution = distribution;
     }
 
     @Override
@@ -17,8 +44,15 @@ public class HybridOutputRF extends AbstractParamRF {
         double[] result1 = function1.apply(input);
         double[] result2 = function2.apply(input);
         double[] totalResult = new double[this.nOfOutputs()];
-        System.arraycopy(result1, 0, totalResult, 0, result1.length);
-        System.arraycopy(result2, 0, totalResult, result1.length, result2.length);
+        int c1 = 0;
+        int c2 = 0;
+        for(int i = 0; i < totalResult.length; ++i) {
+            if(distribution.get(i) == 1) {
+                totalResult[i] = result1[c1++];
+            } else {
+                totalResult[i] = result2[c2++];
+            }
+        }
         return totalResult;
     }
 
