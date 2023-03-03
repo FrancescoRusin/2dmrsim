@@ -1,19 +1,24 @@
 package io.github.ericmedvet.mrsim2d.buildable;
 
 import io.github.ericmedvet.jnb.core.NamedBuilder;
+import io.github.ericmedvet.mrsim2d.core.agents.independentvoxel.NumIndependentVoxel;
+import io.github.ericmedvet.mrsim2d.core.engine.Engine;
 import io.github.ericmedvet.mrsim2d.core.functions.SimpleIntegerSupplier;
+import io.github.ericmedvet.mrsim2d.core.functions.TimedRealFunction;
+import io.github.ericmedvet.mrsim2d.core.tasks.locomotion.PrebuiltIndependentLocomotion;
+import io.github.ericmedvet.mrsim2d.viewer.Drawers;
+import io.github.ericmedvet.mrsim2d.viewer.RealtimeViewer;
+
+import java.util.List;
+import java.util.ServiceLoader;
 
 public class Tester {
     public static void main(String[] args) {
         NamedBuilder<Object> builder = PreparedNamedBuilder.get();
-        SimpleIntegerSupplier supplier = (SimpleIntegerSupplier) builder.build("sim.function.simpleIntegerSupplier(nOfResults = 10)");
-        double[] array1 = new double[10];
-        for(int i = 0; i < 10; ++i) {
-            array1[i] = i / 5d - 0.95;
-        }
-        supplier.setParams(array1);
-        for(int i = 0; i < 10; ++i) {
-            System.out.println(supplier.apply((double) i));
-        }
+        PrebuiltIndependentLocomotion pil = (PrebuiltIndependentLocomotion) builder.build("sim.task.prebuiltIndependentLocomotion(duration = 60; " +
+                "shape = sim.agent.vsr.shape.worm(w = 3; h = 2); linkType = NONE)");
+        NumIndependentVoxel agent = new NumIndependentVoxel(List.of(), NumIndependentVoxel.AreaActuation.OVERALL, false, 0,
+                TimedRealFunction.from((a, b) -> new double[]{0}, 0, 1));
+        pil.run(() -> agent, ServiceLoader.load(Engine.class).findFirst().orElseThrow(), new RealtimeViewer(Drawers.basic().profiled()));
     }
 }
