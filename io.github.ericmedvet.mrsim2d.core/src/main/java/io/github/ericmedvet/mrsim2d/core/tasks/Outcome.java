@@ -23,11 +23,13 @@ public class Outcome {
   }
 
   private enum Aggregate {INITIAL, FINAL, AVERAGE, MIN, MAX}
-  private enum Metric {X, Y, TERRAIN_H, BB_W, BB_H, BB_AREA, MAX_X}
+
+  private enum Metric {X, Y, TERRAIN_H, BB_W, BB_H, BB_AREA, MAX_X, MIN_X}
 
   private enum Subject {FIRST, ALL}
 
-  private record Key(Metric metric, Aggregate aggregate, Subject subject) {}
+  private record Key(Metric metric, Aggregate aggregate, Subject subject) {
+  }
 
   public double allAgentsAverageHeight() {
     return get(Aggregate.AVERAGE, Metric.BB_H, Subject.ALL);
@@ -93,6 +95,14 @@ public class Outcome {
     return allAgentsMaxXDistance() / duration();
   }
 
+  public double allAgentsMinXDistance() {
+    return get(Aggregate.FINAL, Metric.MIN_X, Subject.ALL) - get(Aggregate.INITIAL, Metric.MIN_X, Subject.ALL);
+  }
+
+  public double allAgentsMinXVelocity() {
+    return allAgentsMinXDistance() / duration();
+  }
+
   private double get(Aggregate aggregate, Metric metric, Subject subject) {
     Double value = metricMap.get(new Key(metric, aggregate, subject));
     if (value == null) {
@@ -111,29 +121,31 @@ public class Outcome {
   private double get(Metric metric, Subject subject, Observation observation) {
     return switch (metric) {
       case X -> subject.equals(Subject.FIRST) ? observation.getFirstAgentCenter().x() :
-        observation.getBoundingBoxes().stream().map(BoundingBox::center).mapToDouble(Point::x).average().orElse(0);
+              observation.getBoundingBoxes().stream().map(BoundingBox::center).mapToDouble(Point::x).average().orElse(0);
       case Y -> subject.equals(Subject.FIRST) ? observation.getFirstAgentCenter().y() : observation.getAllBoundingBox()
-          .center()
-          .y();
+              .center()
+              .y();
       case TERRAIN_H -> {
         if (subject.equals(Subject.FIRST)) {
           yield observation.getFirstAgentCenter().y() - observation.getAgents().get(0).terrainHeight();
         } else {
           yield observation.getAgents().stream()
-              .mapToDouble(a -> Point.average(
-                  a.polies().stream().map(Poly::center).toArray(Point[]::new)
-              ).y() - a.terrainHeight())
-              .average().orElse(0d);
+                  .mapToDouble(a -> Point.average(
+                          a.polies().stream().map(Poly::center).toArray(Point[]::new)
+                  ).y() - a.terrainHeight())
+                  .average().orElse(0d);
         }
       }
       case BB_AREA -> subject.equals(Subject.FIRST) ? observation.getFirstAgentBoundingBox()
-          .area() : observation.getAllBoundingBox().area();
+              .area() : observation.getAllBoundingBox().area();
       case BB_W -> subject.equals(Subject.FIRST) ? observation.getFirstAgentBoundingBox()
-          .width() : observation.getAllBoundingBox().width();
+              .width() : observation.getAllBoundingBox().width();
       case BB_H -> subject.equals(Subject.FIRST) ? observation.getFirstAgentBoundingBox()
-          .height() : observation.getAllBoundingBox().height();
+              .height() : observation.getAllBoundingBox().height();
       case MAX_X -> subject.equals(Subject.FIRST) ? observation.getFirstAgentCenter().x() :
-        observation.getAllBoundingBox().max().x();
+              observation.getAllBoundingBox().max().x();
+      case MIN_X -> subject.equals(Subject.FIRST) ? observation.getFirstAgentCenter().x() :
+              observation.getAllBoundingBox().min().x();
     };
   }
 

@@ -147,7 +147,7 @@ public class Terrains {
 
   @SuppressWarnings("unused")
   public static Terrain stairs(
-          @Param(value = "startX", dD = 40d) Double startX,
+          @Param(value = "startX", dD = 5d) Double startX,
           @Param(value = "stepW", dD = 2d) Double stepW,
           @Param(value = "stepH", dD = 2d) Double stepH,
           @Param(value = "w", dD = W) Double w,
@@ -159,7 +159,8 @@ public class Terrains {
     double dW = 0d;
     while (dW < w) {
       dW = dW + stepW;
-      path = path.moveBy(stepW, stepH);
+      path = path.moveBy(0, stepH);
+      path = path.moveBy(stepW, 0);
     }
     return fromPath(path, h, borderW, borderH);
   }
