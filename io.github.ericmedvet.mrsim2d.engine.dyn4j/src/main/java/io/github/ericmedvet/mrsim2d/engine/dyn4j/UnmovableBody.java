@@ -21,7 +21,7 @@
 package io.github.ericmedvet.mrsim2d.engine.dyn4j;
 
 import io.github.ericmedvet.jnb.datastructure.Pair;
-import io.github.ericmedvet.jsdynsym.control.geometry.Line;
+import io.github.ericmedvet.jviz.core.geometry.Line;
 import io.github.ericmedvet.mrsim2d.core.bodies.Anchor;
 import io.github.ericmedvet.mrsim2d.core.geometry.Point;
 import io.github.ericmedvet.mrsim2d.core.geometry.Poly;
@@ -70,13 +70,13 @@ public class UnmovableBody implements io.github.ericmedvet.mrsim2d.core.bodies.U
           Point p1Shifted = s.p1().sum(newDirection);
           Point p2Shifted = s.p2().sum(newDirection);
           return Line.from(
-              new io.github.ericmedvet.jsdynsym.control.geometry.Point(p1Shifted.x(), p1Shifted.y()),
-              new io.github.ericmedvet.jsdynsym.control.geometry.Point(p2Shifted.x(), p2Shifted.y())
+              new io.github.ericmedvet.jviz.core.geometry.Point(p1Shifted.x(), p1Shifted.y()),
+              new io.github.ericmedvet.jviz.core.geometry.Point(p2Shifted.x(), p2Shifted.y())
           );
         }).toList();
         for (int i = 0; i < shiftedSideLines.size() - 1; ++i) {
-          io.github.ericmedvet.jsdynsym.control.geometry.Point jsdynsymInt = shiftedSideLines.get(i)
-              .interception(shiftedSideLines.get(i + 1))
+          io.github.ericmedvet.jviz.core.geometry.Point jsdynsymInt = shiftedSideLines.get(i)
+              .intersection(shiftedSideLines.get(i + 1))
               .orElse(null);
           if (Objects.nonNull(jsdynsymInt)) {
             Point aP = new Point(jsdynsymInt.x(), jsdynsymInt.y());
@@ -90,8 +90,8 @@ public class UnmovableBody implements io.github.ericmedvet.mrsim2d.core.bodies.U
             localAnchors.add(new BodyAnchor(closest, aP, this));
           }
         }
-        io.github.ericmedvet.jsdynsym.control.geometry.Point jsdynsymInt = shiftedSideLines.getLast()
-            .interception(shiftedSideLines.getFirst())
+        io.github.ericmedvet.jviz.core.geometry.Point jsdynsymInt = shiftedSideLines.getLast()
+            .intersection(shiftedSideLines.getFirst())
             .orElse(null);
         if (Objects.nonNull(jsdynsymInt)) {
           Point aP = new Point(jsdynsymInt.x(), jsdynsymInt.y());
